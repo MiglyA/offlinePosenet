@@ -25,6 +25,47 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
   });
 }
 
+/*const rosNode = await rosnodejs.initNode('/posenet');
+// ROS function for simple recieveing node param
+const getParam = async function(key, default_value){
+    if(await rosNode.hasParam(key)){
+        const param = await rosNode.getParam(key);
+        return param;
+    }
+    return default_value;
+}
+
+let buffer = [];
+let newBuffer = false;
+let image_width = 0;
+let image_height = 0;
+let header = null;
+
+// topic names
+const camera_topic = await getParam('topic','/image_raw');
+const output_topic = await getParam('poses_topic','/poses');
+// ROS topics
+let pub = rosNode.advertise(output_topic, StringMsg);
+//
+let sub = rosNode.subscribe(camera_topic, sensor_msgs.Image,
+    (data) => {
+        // TODO more encodings
+        if (data.encoding == 'bgr8'){
+            // Change the encoding to rgb8 
+            // Atm not implemented, this means red is blue and vice versa which leads to worse results
+            // data.data = swapChannels(data.data);
+            data.encoding = 'rgb8';
+        }
+        // Currently works only with rgb8 data
+        assert(data.encoding == 'rgb8');
+        buffer = data.data;
+        newBuffer = true;
+        header = data.header;
+        image_height = data.height;
+        image_width = data.width;
+    }
+);
+*/
 // A function to draw the video and poses into the canvas.
 // This function is independent of the result of posenet
 // This way the video will not seem slow if poseNet 
@@ -48,6 +89,7 @@ const poseNet = ml5.poseNet(video, 'single', gotPoses);
 // A function that gets called every time there's an update from the model
 function gotPoses(results) {
   poses = results;
+  console.log('debug')
 }
 
 // A function to draw ellipses over the detected keypoints
